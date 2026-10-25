@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f5f7fb" />
+  <meta name="description" content="A simple, responsive task manager and productivity tracker with localStorage persistence." />
+  <title>FocusFlow — Task Manager</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#top" aria-label="FocusFlow home"><span class="brand-mark">✦</span><span>focusflow<span class="brand-dot">.</span></span></a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Task filters">
+        <button class="nav-item active" data-filter="all"><span class="nav-icon">▦</span> All tasks <span class="nav-count" id="allCount">0</span></button>
+        <button class="nav-item" data-filter="active"><span class="nav-icon">◷</span> In progress <span class="nav-count" id="activeCount">0</span></button>
+        <button class="nav-item" data-filter="completed"><span class="nav-icon">✓</span> Completed <span class="nav-count" id="completedCount">0</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="mini-card"><div class="mini-icon">✧</div><strong>One step at a time.</strong><p>Small wins add up. Keep your focus on what matters today.</p><div class="mini-sparkline"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <div class="profile"><div class="avatar">LS</div><div><strong>Lakshya Sharma</strong><span>Personal workspace</span></div><span class="profile-dots">•••</span></div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="top">
+      <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <strong>My tasks</strong></div><div class="top-actions"><span class="today-chip"><span class="green-dot"></span> Your personal planner</span><button id="themeToggle" class="icon-button" aria-label="Toggle dark mode" title="Toggle theme">☾</button></div></header>
+      <section class="welcome-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> YOUR DAY, YOUR PACE</div><h1>Make room for <span>what matters.</span></h1><p class="subtitle">A little progress each day adds up to big results.</p></div><div class="date-display"><div class="date-icon">▣</div><div><span id="dayName">TODAY</span><strong id="fullDate">Your day</strong></div></div></section>
+
+      <section class="stats-grid" aria-label="Task statistics">
+        <article class="stat-card"><div class="stat-top"><span>Total tasks</span><span class="stat-icon purple">▦</span></div><div class="stat-number" id="totalStat">0</div><div class="stat-foot">Tasks on your list</div><div class="stat-bar"><i id="totalBar"></i></div></article>
+        <article class="stat-card"><div class="stat-top"><span>In progress</span><span class="stat-icon blue">◷</span></div><div class="stat-number" id="activeStat">0</div><div class="stat-foot">Still to be done</div><div class="stat-bar blue-bar"><i id="activeBar"></i></div></article>
+        <article class="stat-card"><div class="stat-top"><span>Completed</span><span class="stat-icon green">✓</span></div><div class="stat-number" id="doneStat">0</div><div class="stat-foot">Look at you go!</div><div class="stat-bar green-bar"><i id="doneBar"></i></div></article>
+        <article class="stat-card progress-stat"><div class="stat-top"><span>Daily progress</span><span class="stat-icon orange">↗</span></div><div class="progress-stat-body"><div class="progress-ring" id="progressRing"><div><strong id="progressPercent">0%</strong><span>complete</span></div></div><div class="progress-copy"><strong id="progressMessage">Fresh start!</strong><span id="progressSub">Every task is a new opportunity.</span></div></div></article>
+      </section>
+
+      <section class="task-panel">
+        <div class="panel-heading"><div><div class="panel-title-row"><h2>Your tasks</h2><span class="live-badge"><i></i> LIVE</span></div><p>Keep your priorities clear and your momentum going.</p></div><button id="addTaskTop" class="primary-button"><span>＋</span> Add new task</button></div>
+        <div class="toolbar"><div class="filter-tabs" role="group" aria-label="Filter tasks"><button class="filter-tab selected" data-filter="all">All tasks <span id="tabAll">0</span></button><button class="filter-tab" data-filter="active">Active <span id="tabActive">0</span></button><button class="filter-tab" data-filter="completed">Completed <span id="tabCompleted">0</span></button></div><div class="toolbar-right"><label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Search tasks..." aria-label="Search tasks" /></label><select id="sortSelect" class="sort-select" aria-label="Sort tasks"><option value="created">Recently added</option><option value="due">Due date</option><option value="title">Title A–Z</option></select></div></div>
+        <div class="category-row"><span>QUICK CATEGORIES</span><button class="category-pill selected" data-category="All">All <span id="catAll">0</span></button><button class="category-pill" data-category="Work"><span class="category-dot work"></span> Work <span id="catWork">0</span></button><button class="category-pill" data-category="Personal"><span class="category-dot personal"></span> Personal <span id="catPersonal">0</span></button><button class="category-pill" data-category="Study"><span class="category-dot study"></span> Study <span id="catStudy">0</span></button></div>
+        <div id="taskList" class="task-list" aria-live="polite"></div>
+        <div id="emptyState" class="empty-state"><div class="empty-art"><span>✓</span><i>✦</i></div><h3 id="emptyTitle">A clean slate.</h3><p id="emptyText">Add your first task and make today count.</p><button id="emptyAdd" class="primary-button">＋ Create your first task</button></div>
+        <footer class="panel-footer"><span id="footerCount">Showing 0 tasks</span><span><span class="footer-check">✓</span> Your tasks are saved automatically</span></footer>
+      </section>
+      <footer class="app-footer"><span>Made for focus, built for progress <span class="heart">♥</span></span><span>FocusFlow <b>•</b> Personal Productivity</span></footer>
+    </main>
+  </div>
+
+  <div id="taskModal" class="modal-backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-heading"><div><span class="modal-kicker">MAKE IT HAPPEN</span><h2 id="modalTitle">Create a task</h2><p>Break your goals into small, doable steps.</p></div><button id="closeModal" class="modal-close" aria-label="Close dialog">×</button></div>
+      <form id="taskForm"><label class="field-label" for="taskTitle">Task name <span>*</span></label><input id="taskTitle" class="form-control" maxlength="120" placeholder="e.g. Finish Python assignment" required />
+        <div class="form-two-col"><div><label class="field-label" for="taskCategory">Category</label><select id="taskCategory" class="form-control"><option>Study</option><option>Work</option><option>Personal</option></select></div><div><label class="field-label" for="taskDue">Due date</label><input id="taskDue" type="date" class="form-control" /></div></div>
+        <div class="modal-actions"><button type="button" id="cancelModal" class="secondary-button">Cancel</button><button type="submit" class="primary-button"><span>＋</span> <span id="submitLabel">Create task</span></button></div>
+      </form>
+    </section>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
